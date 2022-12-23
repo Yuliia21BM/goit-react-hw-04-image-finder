@@ -1,22 +1,44 @@
 import PropTypes from 'prop-types';
 
-export const Searchbar = onSubmit => {
-  return (
-    <header class="searchbar">
-      <form class="form" onSubmit={() => onSubmit()}>
-        <button type="submit" class="button">
-          <span class="button-label">Search</span>
-        </button>
+import {
+  PageHeader,
+  SearchForm,
+  SearchFormButton,
+  SearchFormButtonLabel,
+  SearchFormInput,
+} from './Searchbar.styled';
 
-        <input
-          class="input"
+export const Searchbar = ({ onSubmit }) => {
+  const handleSubmit = e => {
+    e.preventDefault();
+    const {
+      elements: { request },
+    } = e.currentTarget;
+
+    if (request.value.trim() !== '') {
+      onSubmit(request.value.trim());
+    }
+    e.currentTarget.reset();
+  };
+  return (
+    <PageHeader className="searchbar">
+      <SearchForm className="form" onSubmit={handleSubmit}>
+        <SearchFormButton type="submit" className="button">
+          <SearchFormButtonLabel className="button-label">
+            Search
+          </SearchFormButtonLabel>
+        </SearchFormButton>
+
+        <SearchFormInput
+          className="input"
           type="text"
-          autocomplete="off"
-          autofocus
+          name="request"
+          autoComplete="off"
+          autoFocus
           placeholder="Search images and photos"
         />
-      </form>
-    </header>
+      </SearchForm>
+    </PageHeader>
   );
 };
 
