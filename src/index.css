@@ -17,7 +17,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   color: #212121;
-  background-color: #fff;
+  background-color: rgb(16, 14, 16);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -38,4 +38,10 @@ img {
   grid-template-columns: 1fr;
   grid-gap: 16px;
   padding-bottom: 24px;
+}
+
+@property --d {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 0deg;
 }
