@@ -11,10 +11,16 @@ export const PageHeader = styled.header`
   min-height: 64px;
   padding-right: 24px;
   padding-left: 24px;
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding-top: 18px;
+  padding-bottom: 18px;
   color: #fff;
-  background-color: #3f51b5;
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(121, 9, 100, 1) 59%,
+    rgb(0, 212, 255) 100%
+  );
   box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
     0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 `;
@@ -30,7 +36,9 @@ export const SearchForm = styled.form`
 `;
 
 export const SearchFormButton = styled.button`
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 48px;
   height: 48px;
   border: 0;
@@ -47,8 +55,9 @@ export const SearchFormButton = styled.button`
   }
 `;
 
-export const SearchFormButtonLabel = styled.span`
-  color: #000;
+export const SearchFormButtonImg = styled.img`
+  /* color: #000; */
+  width: 38px;
   /* position: absolute;
   width: 1px;
   height: 1px;

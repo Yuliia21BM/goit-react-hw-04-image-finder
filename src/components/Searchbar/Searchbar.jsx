@@ -4,7 +4,7 @@ import {
   PageHeader,
   SearchForm,
   SearchFormButton,
-  SearchFormButtonLabel,
+  SearchFormButtonImg,
   SearchFormInput,
 } from './Searchbar.styled';
 
@@ -23,12 +23,6 @@ export const Searchbar = ({ onSubmit }) => {
   return (
     <PageHeader className="searchbar">
       <SearchForm className="form" onSubmit={handleSubmit}>
-        <SearchFormButton type="submit" className="button">
-          <SearchFormButtonLabel className="button-label">
-            Search
-          </SearchFormButtonLabel>
-        </SearchFormButton>
-
         <SearchFormInput
           className="input"
           type="text"
@@ -37,6 +31,9 @@ export const Searchbar = ({ onSubmit }) => {
           autoFocus
           placeholder="Search images and photos"
         />
+        <SearchFormButton type="submit" className="button">
+          <SearchFormButtonImg src={require('../../imgs/serchBtn.png')} />
+        </SearchFormButton>
       </SearchForm>
     </PageHeader>
   );
