@@ -19,16 +19,19 @@ export class SearchFormHeader extends Component {
     e.preventDefault();
     const { request } = this.state;
     if (request.trim() === '') {
-      toast('Write some request!', {
-        position: 'top-right',
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
+      toast(
+        'Write some request!'
+        //     , {
+        //   position: 'top-right',
+        //   autoClose: 3000,
+        //   hideProgressBar: false,
+        //   closeOnClick: true,
+        //   pauseOnHover: true,
+        //   draggable: true,
+        //   progress: undefined,
+        //   theme: 'light',
+        // }
+      );
       return;
     }
     this.props.onSubmitForm(request);
