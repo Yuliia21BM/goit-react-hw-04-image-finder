@@ -1,13 +1,15 @@
 import { Component } from 'react';
-import { MutatingDots } from 'react-loader-spinner';
 import axios from 'axios';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { Box } from '../Box';
 import { Searchbar } from '../Searchbar/Searchbar';
 import { ImageGallery } from '../ImageGallery/ImageGallery';
 import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem';
 import { Button } from '../Button/Button';
+import { Loader } from '../Loader/Loader';
+import { SoryNotification } from '../SoryNotification/SoryNotification';
 
 export class App extends Component {
   state = {
@@ -17,6 +19,7 @@ export class App extends Component {
     isLoading: false,
     isImages: true,
     isBtnVisible: false,
+    totalPages: 0,
   };
 
   formSubmitHandler = async request => {
@@ -33,33 +36,57 @@ export class App extends Component {
       .then(res => {
         const { data } = res;
         if (data.total === 0) {
-          this.setState({ isImages: false, isBtnVisible: false });
+          this.setState({ isImages: false, isBtnVisible: false, images: [] });
+          return;
         } else if (data.total <= 12) {
           this.setState({ isBtnVisible: false });
+        } else if (data.total > 12) {
+          this.setState({ isBtnVisible: true });
+        }
+        if (this.state.pageCounter === 1) {
+          toast(`We found ${data.total} images`, {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          });
         }
         return data;
       })
       .then(({ hits }) => {
-        this.setState({ images: hits, isBtnVisible: true });
+        console.log(hits);
+        if (this.state.pageCounter === 1) {
+          this.setState({ images: hits });
+        } else {
+          this.setState(prevState => {
+            return {
+              images: [...prevState.images, ...hits],
+            };
+          });
+        }
         this.setState(prevState => {
           return {
             pageCounter: prevState.pageCounter + 1,
-            // images: prevState.images.push(hits),
           };
         });
       })
+      .catch(error => console.log(error.message))
       .finally(() => {
         this.setState({ isLoading: false });
       });
   }
 
-  loadMore() {
+  loadMore = e => {
     const { recValue } = this.state;
     this.axiosRequest(recValue);
-  }
+  };
 
   render() {
-    const { isLoading, images, isImages, isBtnVisible, loadMore } = this.state;
+    const { isLoading, images, isImages, isBtnVisible } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.formSubmitHandler} />
@@ -78,50 +105,25 @@ export class App extends Component {
 
         {isBtnVisible && (
           <Box display="flex" justifyContent="center" width="100%">
-            <Button onLoadMore={loadMore} text="Load more" />
+            <Button onLoadMore={this.loadMore} text="Load more" />
           </Box>
         )}
 
-        {isLoading && (
-          <Box display="flex" justifyContent="center" width="100%">
-            <MutatingDots
-              height="150"
-              width="150"
-              color="#790964"
-              secondaryColor="#fff"
-              radius="12.5"
-              ariaLabel="mutating-dots-loading"
-              wrapperStyle={{}}
-              wrapperClass=""
-              visible={true}
-              alignSelf="center"
-            />
-          </Box>
-        )}
+        {isLoading && <Loader />}
 
-        {!isImages && (
-          <Box
-            display="flex"
-            justifyContent="center"
-            width="100%"
-            fontSize="30px"
-            color="#fff"
-          >
-            Sorry. We don't have such images :(
-          </Box>
-        )}
+        {!isImages && <SoryNotification />}
 
         <ToastContainer
-          // position="top-right"
+          position="top-right"
           autoClose={3000}
-          // hideProgressBar={false}
-          // newestOnTop={false}
-          // closeOnClick
-          // rtl={false}
-          // pauseOnFocusLoss
-          // draggable
-          // pauseOnHover
-          // theme="light"
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
         />
       </>
     );
