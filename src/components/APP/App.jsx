@@ -98,6 +98,7 @@ export class App extends Component {
                   key={img.id}
                   src={img.webformatURL}
                   alt={img.tags}
+                  srcBig={img.largeImageURL}
                 />
               );
             })}

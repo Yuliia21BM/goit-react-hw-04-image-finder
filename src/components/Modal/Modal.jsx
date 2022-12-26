@@ -1,10 +1,10 @@
 import { Overlay, ModalImg } from './Modal.styled';
 
-export const Modal = () => {
+export const Modal = ({ srcBig, alt }) => {
   return (
     <Overlay>
       <ModalImg>
-        <img src="" alt="" />
+        <img src={srcBig} alt={alt} />
       </ModalImg>
     </Overlay>
   );
