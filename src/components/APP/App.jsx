@@ -10,6 +10,7 @@ import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem';
 import { Button } from '../Button/Button';
 import { Loader } from '../Loader/Loader';
 import { SoryNotification } from '../SoryNotification/SoryNotification';
+import { ScrollToTop } from '../ButtonScrollToTop/ButtonScrollToTop';
 
 export class App extends Component {
   state = {
@@ -20,7 +21,20 @@ export class App extends Component {
     isImages: true,
     isBtnVisible: false,
     totalPages: 0,
+    // btnSkrollToTopVisible: false,
   };
+
+  // componentDidMount() {
+  //   window.addEventListener('scroll', this.scrollFunction);
+  // }
+
+  // scrollFunction = e => {
+  //   if (window.scrollY > 400) {
+  //     this.setState({ btnSkrollToTopVisible: true });
+  //   } else {
+  //     this.setState({ btnSkrollToTopVisible: false });
+  //   }
+  // };
 
   formSubmitHandler = async request => {
     await this.setState({ pageCounter: 1, recValue: request });
@@ -35,16 +49,17 @@ export class App extends Component {
       .get(url)
       .then(res => {
         const { data } = res;
-        if (data.total === 0) {
+        const { hits, totalHits, total } = data;
+        if (total === 0) {
           this.setState({ isImages: false, isBtnVisible: false, images: [] });
           return;
-        } else if (data.total <= 12) {
+        } else if (total <= 12) {
           this.setState({ isBtnVisible: false });
-        } else if (data.total > 12) {
+        } else if (total > 12) {
           this.setState({ isBtnVisible: true });
         }
         if (this.state.pageCounter === 1) {
-          toast(`We found ${data.total} images`, {
+          toast(`We found ${total} images`, {
             position: 'top-right',
             autoClose: 3000,
             hideProgressBar: false,
@@ -55,10 +70,6 @@ export class App extends Component {
             theme: 'light',
           });
         }
-        return data;
-      })
-      .then(({ hits }) => {
-        console.log(hits);
         if (this.state.pageCounter === 1) {
           this.setState({ images: hits });
         } else {
@@ -73,6 +84,11 @@ export class App extends Component {
             pageCounter: prevState.pageCounter + 1,
           };
         });
+        if (totalHits === 500 && this.state.pageCounter === 42) {
+          this.setState({ isBtnVisible: false });
+        } else if (Math.ceil(totalHits / 12) === this.state.pageCounter) {
+          this.setState({ isBtnVisible: false });
+        }
       })
       .catch(error => console.log(error.message))
       .finally(() => {
@@ -113,6 +129,8 @@ export class App extends Component {
         {isLoading && <Loader />}
 
         {!isImages && <SoryNotification />}
+
+        <ScrollToTop />
 
         <ToastContainer
           position="top-right"

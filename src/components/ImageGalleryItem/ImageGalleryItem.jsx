@@ -40,4 +40,5 @@ export class ImageGalleryItem extends Component {
 ImageGalleryItem.propTypes = {
   src: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,
+  srcBig: PropTypes.string.isRequired,
 };
