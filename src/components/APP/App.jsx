@@ -20,27 +20,22 @@ export class App extends Component {
     isLoading: false,
     isImages: true,
     isBtnVisible: false,
-    totalPages: 0,
-    // btnSkrollToTopVisible: false,
+    // totalPages: 0,
   };
 
-  // componentDidMount() {
-  //   window.addEventListener('scroll', this.scrollFunction);
-  // }
-
-  // scrollFunction = e => {
-  //   if (window.scrollY > 400) {
-  //     this.setState({ btnSkrollToTopVisible: true });
-  //   } else {
-  //     this.setState({ btnSkrollToTopVisible: false });
-  //   }
-  // };
-
-  formSubmitHandler = async request => {
-    await this.setState({ pageCounter: 1, recValue: request });
-    const { recValue } = this.state;
-    await this.axiosRequest(recValue);
+  formSubmitHandler = request => {
+    this.setState({ pageCounter: 1, recValue: request, images: [] });
   };
+
+  componentDidUpdate(_, prevState) {
+    if (
+      prevState.pageCounter !== this.state.pageCounter ||
+      prevState.recValue !== this.state.recValue
+    ) {
+      const { recValue } = this.state;
+      this.axiosRequest(recValue);
+    }
+  }
 
   async axiosRequest(request) {
     this.setState({ isLoading: true, isImages: true, isBtnVisible: false });
@@ -79,11 +74,6 @@ export class App extends Component {
             };
           });
         }
-        this.setState(prevState => {
-          return {
-            pageCounter: prevState.pageCounter + 1,
-          };
-        });
         if (totalHits === 500 && this.state.pageCounter === 42) {
           this.setState({ isBtnVisible: false });
         } else if (Math.ceil(totalHits / 12) === this.state.pageCounter) {
@@ -97,8 +87,11 @@ export class App extends Component {
   }
 
   loadMore = e => {
-    const { recValue } = this.state;
-    this.axiosRequest(recValue);
+    this.setState(prevState => {
+      return {
+        pageCounter: prevState.pageCounter + 1,
+      };
+    });
   };
 
   render() {

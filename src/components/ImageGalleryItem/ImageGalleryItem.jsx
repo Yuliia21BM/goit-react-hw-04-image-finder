@@ -16,12 +16,15 @@ export class ImageGalleryItem extends Component {
     this.setState({ isOpenMadal: true });
     window.addEventListener('keydown', this.handleCloseModalClick);
   };
-  handleCloseModalClick = e => {
+  handleCloseModalEscapeClick = e => {
     if (e.code === 'Escape') {
       this.setState({ isOpenMadal: false });
     }
     return () =>
       window.removeEventListener('keydown', this.handleCloseModalClick);
+  };
+  handleCloseModalClick = e => {
+    this.setState({ isOpenMadal: false });
   };
   render() {
     const { isOpenMadal } = this.state;
@@ -31,7 +34,13 @@ export class ImageGalleryItem extends Component {
         <ImgGalleryItem onClick={this.handleOpenModalClick}>
           <ImageGalleryItemImage src={src} alt={alt} />
         </ImgGalleryItem>
-        {isOpenMadal && <Modal alt={alt} srcBig={srcBig} />}
+        {isOpenMadal && (
+          <Modal
+            onClick={this.handleCloseModalClick}
+            alt={alt}
+            srcBig={srcBig}
+          />
+        )}
       </>
     );
   }
