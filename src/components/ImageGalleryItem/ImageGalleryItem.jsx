@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Component } from 'react';
+import { useState } from 'react';
 
 import { Modal } from '../Modal/Modal';
 
@@ -8,43 +8,32 @@ import {
   ImageGalleryItemImage,
 } from './ImageGalleryItem.styled';
 
-export class ImageGalleryItem extends Component {
-  state = {
-    isOpenMadal: false,
+export const ImageGalleryItem = ({ src, alt, srcBig }) => {
+  const [isOpenMadal, setIsOpenMadal] = useState(false);
+
+  const handleOpenModalClick = e => {
+    setIsOpenMadal(true);
+    window.addEventListener('keydown', handleCloseModalEscapeClick);
   };
-  handleOpenModalClick = e => {
-    this.setState({ isOpenMadal: true });
-    window.addEventListener('keydown', this.handleCloseModalClick);
+  const handleCloseModalEscapeClick = e => {
+    if (e.code !== 'Escape') return;
+    handleCloseModalClick();
   };
-  handleCloseModalEscapeClick = e => {
-    if (e.code === 'Escape') {
-      this.setState({ isOpenMadal: false });
-    }
-    return () =>
-      window.removeEventListener('keydown', this.handleCloseModalClick);
+  const handleCloseModalClick = e => {
+    setIsOpenMadal(false);
+    window.removeEventListener('keydown', handleCloseModalEscapeClick);
   };
-  handleCloseModalClick = e => {
-    this.setState({ isOpenMadal: false });
-  };
-  render() {
-    const { isOpenMadal } = this.state;
-    const { src, alt, srcBig } = this.props;
-    return (
-      <>
-        <ImgGalleryItem onClick={this.handleOpenModalClick}>
-          <ImageGalleryItemImage src={src} alt={alt} />
-        </ImgGalleryItem>
-        {isOpenMadal && (
-          <Modal
-            onClick={this.handleCloseModalClick}
-            alt={alt}
-            srcBig={srcBig}
-          />
-        )}
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <ImgGalleryItem onClick={handleOpenModalClick}>
+        <ImageGalleryItemImage src={src} alt={alt} />
+      </ImgGalleryItem>
+      {isOpenMadal && (
+        <Modal onClick={handleCloseModalClick} alt={alt} srcBig={srcBig} />
+      )}
+    </>
+  );
+};
 
 ImageGalleryItem.propTypes = {
   src: PropTypes.string.isRequired,
