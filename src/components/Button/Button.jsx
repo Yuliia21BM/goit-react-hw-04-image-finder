@@ -1,15 +1,12 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Btn } from './Button.styled';
 
-export class Button extends Component {
-  handleClick = e => {
-    this.props.onLoadMore(e);
+export const Button = ({ onLoadMore, text }) => {
+  const handleClick = e => {
+    onLoadMore(e);
   };
-  render() {
-    return <Btn onClick={this.handleClick}>{this.props.text}</Btn>;
-  }
-}
+  return <Btn onClick={handleClick}>{text}</Btn>;
+};
 
 Button.propTypes = {
   text: PropTypes.string,
