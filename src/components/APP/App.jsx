@@ -12,7 +12,7 @@ export const App = () => {
   return (
     <>
       <Searchbar onSubmit={setRecValue} />
-      <ImageGallery recValue={recValue} />
+      <ImageGallery recVal={recValue} />
 
       <ScrollToTop />
 
