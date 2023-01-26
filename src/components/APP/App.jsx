@@ -9,13 +9,9 @@ import { ScrollToTop } from '../ButtonScrollToTop/ButtonScrollToTop';
 export const App = () => {
   const [recValue, setRecValue] = useState('');
 
-  const formSubmitHandler = request => {
-    setRecValue(request);
-  };
-
   return (
     <>
-      <Searchbar onSubmit={formSubmitHandler} />
+      <Searchbar onSubmit={setRecValue} />
       <ImageGallery recValue={recValue} />
 
       <ScrollToTop />
